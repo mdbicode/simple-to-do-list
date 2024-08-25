@@ -1,4 +1,5 @@
 ## Simple To Do List with JavaScript
+This project has 2 branches, one is a jquery script
 <h2>Preview</h2>
 <table>
   <tr>
