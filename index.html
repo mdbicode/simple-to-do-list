@@ -5,6 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>To Do List</title>
     <link rel="stylesheet" href="style.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            // Modal
+            $('#myBtn').click(function(){
+                $('#myModal').show();
+            });
+            $('.close').click(function(){
+                $('#myModal').hide();
+            });
+            $(window).click(function(e){
+                if($(e.target).is('#myModal')){
+                    $('#myModal').hide();
+                }
+            });
+
+            // To Do List
+            var taskObj = [
+                ["Read a Book, 9:00 PM"],
+                ["Sleep, 10:00 PM"]
+            ]
+
+            addRows(taskObj); 
+            deleteBtn();
+            
+            
+            function tasks(){
+                var rows = 0;
+                var completed = 0;
+                $('.row').each(function(e){
+                    rows = $('.row').length;
+                    if($(this).hasClass('line-throught')){
+                        completed += 1;
+                    }else{
+                        
+                    }
+                })
+                var tasks = parseInt(rows) - parseInt(completed);
+                $('#tasks').text(`${tasks} Task`)
+            }
+            
+            function checkBox(){
+                $('.row input[type="checkbox"]').each(function(){
+                    var row = $(this).parent();
+                    if(row.hasClass('line-throught')){
+                        $(this).prop('checked', true);
+                    }else{
+                        $(this).prop('checked', false);
+                    }
+                    
+                    $(this).click(function(){
+                        if(row.hasClass('line-throught')){
+                            $(this).checked;
+                            row.removeClass('line-throught')
+                            tasks();
+                        }else{
+                            row.addClass('line-throught');
+                            tasks();
+                        }})
+                })
+
+            }
+
+            function addRows(data){
+                $('.content').empty();
+                $(data).each(function(index,element){
+                    var [task,time] = element[0].split(', ');
+                    var rowDiv = $('<div class="row"></div>');
+                    var checkbox = $('<input type="checkbox">');
+                    var task = $(`<p class=task"></p>`).text(task);
+                    var deadLine = $(`<p class=task"></p>`).text(time);
+                    var button = $('<button class="delete-button">X</>');
+                        $(rowDiv).append([checkbox,task,deadLine,button]);
+                        $('.content').append($(rowDiv));
+                    });
+                    deleteBtn();
+                    tasks();
+                    checkBox();
+                }
+
+            function newTask(e){
+                e.preventDefault();
+                var task = $('.input-data input').eq(0).val();
+                var hour = $('.input-data input').eq(1).val();
+                var minutes = $('.input-data input').eq(2).val();
+                var format = $('.input-data').eq(3).val();
+
+                var addTaskObj = `${task}, ${hour}:${minutes} ${format}`
+                taskObj.push([addTaskObj]);
+                addRows(taskObj);
+                
+            }
+            
+            $('#myModal form button').click(function(e){
+                newTask(e);
+            });
+            function deleteBtn(){
+                $('.row button').each(function(index){
+                    $(this).click(function(e){
+                        taskObj.splice(index, 1);
+                        addRows(taskObj);
+                    })
+                })
+            }
+
+
+        })
+    </script>
 </head>
 <body>
     <div class="container">
@@ -60,6 +168,6 @@
         </div>
     
     </div>
-    <script src="script.js"></script>
+    
 </body>
 </html>
